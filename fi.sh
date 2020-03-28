@@ -29,7 +29,14 @@ delete Services
 delete SupportedFeatures
 delete VendorID
 
-PlistBuddy -c "Merge Controller.plist :DeviceCache:$addr" $plist
+macOS_ver=$(sw_vers -productVersion)
+
+if [[ $macOS_ver == 10.15.* ]]
+then
+    PlistBuddy -c "Merge Controller-catalina.plist :DeviceCache:$addr" $plist
+else
+    PlistBuddy -c "Merge Controller.plist :DeviceCache:$addr" $plist
+fi
 
 defaults read $plist &> /dev/null
 
